@@ -199,17 +199,19 @@ public class BowtieJsonSchemaValidator {
         ann.put("instanceLocation", unit.getInstanceLocation() == null ? "" : unit.getInstanceLocation());
 
         String sloc = unit.getSchemaLocation();
-        if (sloc == null) {
-          sloc = "";
+        if (sloc == null || sloc.isEmpty()) {
+          sloc = "#";
         }
         String suffix = "/" + entry.getKey();
         if (sloc.endsWith(suffix)) {
           sloc = sloc.substring(0, sloc.length() - suffix.length());
         }
-        if (sloc.isEmpty()) {
-          sloc = "#";
+
+        if (sloc.startsWith("#")) {
+          ann.put("keywordLocation", sloc);
+        } else {
+          ann.put("absoluteKeywordLocation", sloc);
         }
-        ann.put("keywordLocation", sloc);
         ann.put("annotation", entry.getValue());
         list.add(ann);
       }
